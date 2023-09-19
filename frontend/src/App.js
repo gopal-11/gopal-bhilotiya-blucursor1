@@ -10,6 +10,7 @@ function App() {
   const [ratingValue, setRatingValue] = useState(1);
   const [isGroup, setIsGroup] = useState(false);
   const [showCart, setShowCart] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   // Fetch data from the API
   useEffect(() => {
@@ -73,6 +74,7 @@ function App() {
     }
 
     setCart(updatedCart);
+    setQuantity(1);
   };
 
   useEffect(() => {
@@ -127,7 +129,7 @@ function App() {
 
         {showCart ? (
           <div style={{ border: '1px solid black' }}>
-            <h2>Cart</h2>
+            <h2>Cart Details</h2>
             <ul>
               {cart.map((cartItem) => (
                 <li key={cartItem.id} style={{ listStyleType: 'none' }}>
@@ -178,16 +180,30 @@ function App() {
                             justifyContent: 'center',
                             flexDirection: 'column',
                             padding: '10px',
+                            rowGap: '10px',
                           }}
                         >
-                          <span>{item.title}</span>
-                          <span>Price: {item.price}</span>
+                          <span>
+                            <b>{item.title}</b>
+                          </span>
+                          <span>Price: {item.price} Rs</span>
                           <span>Rating: {getStars(item.rating.rate)}</span>
+                          <label style={{ margin: '10px' }}>
+                            Qty:
+                            <input
+                              type="number"
+                              value={quantity}
+                              onChange={(e) => {
+                                if (Number(e.target.value > 0))
+                                  setQuantity(e.target.value);
+                              }}
+                            />
+                          </label>
                           <span>
                             {' '}
                             <button
                               onClick={() => {
-                                addToCart(item, 1);
+                                addToCart(item, Number(quantity));
                               }}
                             >
                               Add to Cart
@@ -234,21 +250,34 @@ function App() {
                         justifyContent: 'center',
                         flexDirection: 'column',
                         padding: '10px',
+                        rowGap: '10px',
                       }}
                     >
-                      <span>{item.title}</span>
-                      <span>Price: {item.price}</span>
+                      <span>
+                        <b>{item.title}</b>
+                      </span>
+                      <span>Price: {item.price} Rs</span>
                       <span>Rating: {getStars(item.rating.rate)}</span>
                       <span>
-                        {' '}
-                        <button
-                          onClick={() => {
-                            addToCart(item, 1);
-                          }}
-                        >
-                          Add to Cart
-                        </button>
+                        <label style={{ margin: '10px' }}>
+                          Qty:
+                          <input
+                            type="number"
+                            value={quantity}
+                            onChange={(e) => {
+                              if (Number(e.target.value > 0))
+                                setQuantity(e.target.value);
+                            }}
+                          />
+                        </label>
                       </span>
+                      <button
+                        onClick={() => {
+                          addToCart(item, Number(quantity));
+                        }}
+                      >
+                        Add to Cart
+                      </button>
                     </div>
                   </div>
                 ))}
